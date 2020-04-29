@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">PetShopSI</string>
+    <string name="app_name">Solicitar Serviço</string>
+
+    <string name="Busca">Solicitar Serviço</string>
 </resources>
