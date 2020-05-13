@@ -12,8 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CadastrarClienteActivity"></activity>
+        <activity android:name=".SolicitarServicoActivity"></activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".SolicitarServicoActivity">
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
