@@ -27,11 +27,8 @@ public class SolicitarServicoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solicitar_servico);
 
-<<<<<<< HEAD
         // cast
-=======
 
->>>>>>> 0832d047402a74cc2939891cd43ba0a8c940ff17
         spinner = (Spinner) findViewById(R.id.spinner);
         checkBoxBanho = (CheckBox) findViewById(R.id.checkBanho);
         checkBoxTosa = (CheckBox) findViewById(R.id.checkTosa);
@@ -87,20 +84,13 @@ public class SolicitarServicoActivity extends AppCompatActivity {
 
                 if (b) {
                     spinner.setEnabled(true);
-                    Toast.makeText(SolicitarServicoActivity.this, "Marcado", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SolicitarServicoActivity.this, "Marcado", Toast.LENGTH_SHORT).show();
                 } else {
                     spinner.setEnabled(false);
-                    Toast.makeText(SolicitarServicoActivity.this, "Não marcado", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SolicitarServicoActivity.this, "Não marcado", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
-
-
-
-
-
 
 
     }
