@@ -1,4 +1,4 @@
-package br.com.petshopsi.firebase;
+package br.com.petshopsi.classes;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

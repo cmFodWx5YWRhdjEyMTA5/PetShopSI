@@ -1,23 +1,22 @@
 package br.com.petshopsi.classes;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
-
-import br.com.petshopsi.firebase.ConfiguracaoFirebase;
+import br.com.petshopsi.classes.ConfiguracaoFirebase;
 
 public class Cliente {
-    private String id, nome, endereco, telefone,email, senha, data, cpf, observacoes;
+    private String id, nome, endereco, telefone,email, senha, data, cpf, observacoes, perfil;
 
     public Cliente() {
     }
 
-    // METODO DE SALVAR
     public void salvar(){
         DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
-        //referenciaFirebase.child("Cliente").child(getId()).setValue(Cliente.this);
-        referenciaFirebase.child("Usuarios").child(getId()).setValue(Cliente.this);
+        referenciaFirebase.child("Usuario").child(getId()).setValue(Cliente.this);
     }
 
+    @Exclude
     public String getId() {
         return id;
     }
@@ -58,6 +57,7 @@ public class Cliente {
         this.email = email;
     }
 
+    @Exclude
     public String getSenha() {
         return senha;
     }
@@ -90,4 +90,11 @@ public class Cliente {
         this.observacoes = observacoes;
     }
 
+    public String getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
+    }
 }

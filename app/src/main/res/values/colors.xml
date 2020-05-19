@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#562514</color>
     <color name="colorAccent">#03DAC5</color>
 
+    <!-- CORES BACKGROUND -->
+    <color name="branco">#ffffff</color>
 </resources>
