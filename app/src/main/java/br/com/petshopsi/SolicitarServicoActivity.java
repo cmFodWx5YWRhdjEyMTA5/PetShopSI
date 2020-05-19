@@ -28,7 +28,6 @@ public class SolicitarServicoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_solicitar_servico);
 
         // cast
-
         spinner = (Spinner) findViewById(R.id.spinner);
         checkBoxBanho = (CheckBox) findViewById(R.id.checkBanho);
         checkBoxTosa = (CheckBox) findViewById(R.id.checkTosa);
