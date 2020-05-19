@@ -18,6 +18,7 @@ public class SolicitarServicoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solicitar_servico);
 
+
         spinner = (Spinner) findViewById(R.id.spinner);
 
         List<String> list = new ArrayList<String>();
