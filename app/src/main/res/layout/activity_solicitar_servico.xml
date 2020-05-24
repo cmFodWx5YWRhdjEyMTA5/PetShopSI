@@ -35,37 +35,23 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/checkBanho"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginTop="30dp"
-                android:text="Banho"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:textSize="16dp"
-                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="135dp">
 
-            <CheckBox
-                android:id="@+id/checkTosa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="32dp"
-                android:layout_marginLeft="18dp"
-                android:visibility="visible"
-                tools:visibility="visible"
-                android:text="Tosa"
-                android:textSize="16dp"
-                />
+                <ListView
+                    android:id="@+id/listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
             <CheckBox
                 android:id="@+id/checkTransporte"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="32dp"
-                android:layout_marginLeft="18dp"
+                android:layout_marginLeft="10dp"
                 android:visibility="visible"
                 tools:visibility="visible"
                 android:text="Transporte"
@@ -80,7 +66,8 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="32dp"
                 android:text="Escolha a modalidade de transporte abaixo:"
-                android:textSize="16dp">
+                android:textSize="16dp"
+                >
 
             </TextView>
 
