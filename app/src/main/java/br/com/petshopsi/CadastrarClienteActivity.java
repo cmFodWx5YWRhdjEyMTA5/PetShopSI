@@ -64,6 +64,7 @@ public class CadastrarClienteActivity extends AppCompatActivity {
         edtCpf = (EditText)findViewById(R.id.edtCpf);
         edtObservacoes = (EditText)findViewById(R.id.edtObservacoes);
         btnCadastrarCliente = (Button) findViewById(R.id.btnCadastrarCliente);
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         btnCadastrarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,10 +120,8 @@ public class CadastrarClienteActivity extends AppCompatActivity {
                     cliente.setCpf(cpf);
                     cliente.setObservacoes(observacoes);
                     cliente.setPerfil("Cliente");
-                    progressBar.setVisibility(View.VISIBLE);
+
                     cadastrarCliente();
-                    progressBar.setVisibility(View.GONE);
-                    limparCampos();
 
                 } catch (Exception ex){
                     Toast.makeText(CadastrarClienteActivity.this, "Ocorreu um erro, tente novamente mais tarde!", Toast.LENGTH_SHORT).show();
@@ -135,6 +134,7 @@ public class CadastrarClienteActivity extends AppCompatActivity {
 
     // CADASTRAR CLIENTE
     private void cadastrarCliente(){
+        progressBar.setVisibility(View.VISIBLE);
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         autenticacao.createUserWithEmailAndPassword(
                 cliente.getEmail(),
@@ -158,9 +158,14 @@ public class CadastrarClienteActivity extends AppCompatActivity {
                                     if (task.isSuccessful()){
                                         // FORÇA LOGOFF
                                         autenticacao.signOut();
+                                        progressBar.setVisibility(View.GONE);
+                                        limparCampos();
                                         // ALERTA DE USUÁRIO CRIADO COM SUCESSO
                                         Toast.makeText(CadastrarClienteActivity.this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
+
                                     }else {
+                                        progressBar.setVisibility(View.GONE);
+                                        limparCampos();
                                         Toast.makeText(CadastrarClienteActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
