@@ -1,5 +1,6 @@
 package br.com.petshopsi;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -7,8 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +24,15 @@ import java.util.List;
 public class SolicitarServicoActivity extends AppCompatActivity {
 
     Spinner spinner;
-    private CheckBox checkBoxBanho;
-    private CheckBox checkBoxTosa;
     private CheckBox checkBoxTransporte;
     private EditText datasolicitacao;
+
+    ListView listView;
+    FirebaseDatabase database;
+    DatabaseReference ref;
+    ArrayList<String> list;
+    ArrayAdapter<String> adapter;
+    Servico servico;
 
 
     @Override
@@ -29,11 +42,36 @@ public class SolicitarServicoActivity extends AppCompatActivity {
 
         // cast
         spinner = (Spinner) findViewById(R.id.spinner);
-        checkBoxBanho = (CheckBox) findViewById(R.id.checkBanho);
-        checkBoxTosa = (CheckBox) findViewById(R.id.checkTosa);
         checkBoxTransporte = (CheckBox) findViewById(R.id.checkTransporte);
         datasolicitacao = (EditText) findViewById(R.id.data_solicitacao);
+        servico = new Servico();
 
+        listView = (ListView) findViewById(R.id.listView);
+
+        database = FirebaseDatabase.getInstance();
+        ref = database.getReference("Usuario");
+        list = new ArrayList<>();
+        adapter = new ArrayAdapter<String>(this, R.layout.servico_info,R.id.servicoInfo, list);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Pega todos os filhos que estão dentro do nó pai Serviço
+                for(DataSnapshot data: dataSnapshot.getChildren()){
+
+                    servico = data.getValue(Servico.class);
+                    //servico.toString();
+                    // servico = ds.getValue(Servico.class);
+                    list.add(servico.getNome().toString());
+                }
+
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         List<String> list = new ArrayList<String>();
@@ -47,30 +85,6 @@ public class SolicitarServicoActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
-
-
-
-        checkBoxBanho.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    Toast.makeText(SolicitarServicoActivity.this, "Marcado", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        checkBoxTosa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if (b) {
-                    Toast.makeText(SolicitarServicoActivity.this, "Marcado", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SolicitarServicoActivity.this, "Não marcado", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
 
         //Validar se o checkbox de transporte esta selecionado

@@ -34,6 +34,8 @@
                 android:value="br.com.petshopsi.MainActivity" />
         </activity>
 
+        <activity android:name=".Retrieve"></activity>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
