@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnTelaCadastrarCliente, btnTelaSolicitarServico, btnTelaLogin;
+    Button btnTelaCadastrarCliente, btnTelaSolicitarServico, btnTelaLogin, btnCadastrarServico;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         btnTelaCadastrarCliente = (Button)findViewById(R.id.btnTelaCadastrarCliente);
         btnTelaSolicitarServico = (Button)findViewById(R.id.btnTelaSolicitarServico);
         btnTelaLogin = (Button)findViewById(R.id.btnTelaLogin);
+        btnCadastrarServico = (Button)findViewById(R.id.btnCadastrarServico);
 
         btnTelaCadastrarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Login.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCadastrarServico.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CadastrarServicoActivity.class);
                 startActivity(intent);
             }
         });
