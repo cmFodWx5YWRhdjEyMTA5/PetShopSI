@@ -15,8 +15,18 @@
         <activity android:name=".Login"></activity>
 
         <activity
-            android:name=".CadastrarClienteActivity"
+            android:name=".CadastraFuncionario"
             android:label="@string/tela_cadastrar_cliente"
+            android:parentActivityName="br.com.petshopsi.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.petshopsi.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".SolicitarServicoActivity"
+            android:label="@string/tela_solicitar_servico"
             android:parentActivityName="br.com.petshopsi.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
