@@ -39,10 +39,10 @@ public class CadastrarServicoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 HashMap<String,Object> map = new HashMap<>();
-                map.put("Serviço: ",editServico.getText().toString());
-                map.put("Descrição:",editdDscricao.getText().toString());
-                map.put("Valor:",editValor.getText().toString());
-                map.put("Observação:",editObs.getText().toString());
+                map.put("Serviço",editServico.getText().toString());
+                map.put("Descrição",editdDscricao.getText().toString());
+                map.put("Valor",editValor.getText().toString());
+                map.put("Observação",editObs.getText().toString());
 
                 FirebaseDatabase.getInstance().getReference().child("Cadastrar Serviço").push()
                         .setValue(map)
