@@ -11,52 +11,52 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Login"></activity>
-
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Login" />
         <activity
             android:name=".CadastraFuncionario"
             android:label="@string/tela_cadastrar_cliente"
-            android:parentActivityName="br.com.petshopsi.MainActivity">
+            android:parentActivityName=".MainActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.petshopsi.MainActivity" />
         </activity>
-
         <activity
             android:name=".SolicitarServicoActivity"
             android:label="@string/tela_solicitar_servico"
-            android:parentActivityName="br.com.petshopsi.MainActivity">
+            android:parentActivityName=".MainActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.petshopsi.MainActivity" />
         </activity>
-
         <activity
-            android:name=".SolicitarServicoActivity"
+            android:name=".CadastrarClienteActivity"
             android:label="@string/tela_solicitar_servico"
-            android:parentActivityName="br.com.petshopsi.MainActivity">
+            android:parentActivityName=".MainActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.petshopsi.MainActivity" />
         </activity>
-
         <activity
             android:name=".CadastrarServicoActivity"
             android:label="Cadastrar serviço"
-            android:parentActivityName="br.com.petshopsi.MainActivity">
+            android:parentActivityName=".MainActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.petshopsi.MainActivity" />
         </activity>
 
-        <activity android:name=".Retrieve"></activity>
+        <activity android:name=".Retrieve" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".HomeClienteNavActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

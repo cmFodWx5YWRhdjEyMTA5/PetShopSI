@@ -6,4 +6,5 @@
 
     <!-- CORES BACKGROUND -->
     <color name="branco">#ffffff</color>
+    <color name="colorGray">#B4BABA</color>
 </resources>

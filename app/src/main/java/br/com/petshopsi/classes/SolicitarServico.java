@@ -3,19 +3,55 @@ package br.com.petshopsi.classes;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
+import br.com.petshopsi.Servico;
+
 public class SolicitarServico {
 
     private String id , ServicoSelecionado, checkBoxTransporte, transporteSelecionado, dataServico, horaServico, valorServico;
+    // OBS -> Remover ServicoSelecionado, n fiz pq esta dando erros no cod.
+    private Cliente cliente;
 
+    private Servico servico;
+    private Funcionario funcionario;
 
     public SolicitarServico() {
-
+        this.cliente = new Cliente();
+        this.servico = new Servico();
+        this.funcionario = new Funcionario();
     }
 
     public void salvar(){
         DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
         referenciaFirebase.child("SolicitarServico").child(getId()).setValue(SolicitarServico.this);
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Servico getServico() {
+        return servico;
+    }
+
+    public void setServico(Servico servico) {
+        this.servico = servico;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+
+
     @Exclude
     public String getId() {
         return id;

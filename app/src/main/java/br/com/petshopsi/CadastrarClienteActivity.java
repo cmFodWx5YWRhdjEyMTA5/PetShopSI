@@ -111,15 +111,15 @@ public class CadastrarClienteActivity extends AppCompatActivity {
                     }
 
                     cliente = new Cliente();
-                    cliente.setNome(nome);
-                    cliente.setEndereco(endereco);
-                    cliente.setTelefone(telefone);
-                    cliente.setEmail(email);
-                    cliente.setSenha(senha);
-                    cliente.setData(dataNascimento);
-                    cliente.setCpf(cpf);
-                    cliente.setObservacoes(observacoes);
-                    cliente.setPerfil("Cliente");
+                    cliente.nome = (nome);
+                    cliente.endereco = (endereco);
+                    cliente.telefone = (telefone);
+                    cliente.email = (email);
+                    cliente.senha = (senha);
+                    cliente.data = (dataNascimento);
+                    cliente.cpf = (cpf);
+                    cliente.observacoes = (observacoes);
+
 
                     cadastrarCliente();
 
@@ -137,8 +137,8 @@ public class CadastrarClienteActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         autenticacao.createUserWithEmailAndPassword(
-                cliente.getEmail(),
-                cliente.getSenha()
+                cliente.email,
+                cliente.senha
         )
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -148,7 +148,7 @@ public class CadastrarClienteActivity extends AppCompatActivity {
                             // CADASTRA OS DADOS NO REAL DATABASE
                             // Recebe o mesmo ID do Usuário para o cadastro no banco
                             FirebaseUser clienteFirebase = task.getResult().getUser();
-                            cliente.setId(clienteFirebase.getUid());
+                            cliente.id = (clienteFirebase.getUid());
                             cliente.salvar();
 
                             // FAZ ENVIO DO EMAIL PARA ATIVAÇÂO DE CONTA

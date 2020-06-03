@@ -3,4 +3,10 @@
 
     <string name="tela_cadastrar_cliente">Cadastrar cliente</string>
     <string name="tela_solicitar_servico">Solicitar serviço</string>
+    <string name="tipo_de_conta">Tipo de Conta</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="home_fragment">PetShop Bichos SI</string>
+    <string name="servicos_fragment">Tela Serviços - Cliente</string>
+    <string name="sobre_fragment">Tela Sobre</string>
 </resources>
