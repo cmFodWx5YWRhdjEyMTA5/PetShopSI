@@ -16,12 +16,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
+import br.com.petshopsi.classes.Funcionario;
 
 public class CadastraFuncionario extends AppCompatActivity {
 
     private EditText editNome,editdFuncao,editCpf,editRg,editPis,editMatricula;
     private Button save;
+
+    private Funcionario func;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,16 +43,29 @@ public class CadastraFuncionario extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                final HashMap<String,Object> map = new HashMap<>();
-                map.put("NomeFuncionario",editNome.getText().toString());
-                map.put("Funcao",editdFuncao.getText().toString());
-                map.put("CPF",editCpf.getText().toString());
-                map.put("RG",editRg.getText().toString());
-                map.put("PIS",editPis.getText().toString());
-                map.put("Matricula",editMatricula.getText().toString());
+                String nome = editNome.getText().toString();
+                String funcao = editdFuncao.getText().toString();
+                String cpf = editCpf.getText().toString();
+                String rg = editRg.getText().toString();
+                String pis = editPis.getText().toString();
+                String matricula = editMatricula.getText().toString();
+                String perfil = "Funcionario";
+
+
+
+
+                func = new Funcionario();
+                func.nome = (nome);
+                func.funcao = (funcao);
+                func.cpf = (cpf);
+                func.rg = (rg);
+                func.pis = (pis);
+                func.matricula = (matricula);
+                func.perfil = (perfil);
+
 
                 FirebaseDatabase.getInstance().getReference().child("Funcionario").push()
-                        .setValue(map)
+                        .setValue(func)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -57,6 +73,7 @@ public class CadastraFuncionario extends AppCompatActivity {
                                 //Log.d("tag", "Serviço Cadastrado com sucesso");
 
                             }
+
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -71,6 +88,7 @@ public class CadastraFuncionario extends AppCompatActivity {
                         //Log.d("tag", "Serviço Cadastrado com sucesso");
 
                         Toast.makeText(CadastraFuncionario.this, "Funcionário cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
+
                         editNome.getText().clear();
                         editdFuncao.getText().clear();
                         editCpf.getText().clear();
@@ -80,6 +98,7 @@ public class CadastraFuncionario extends AppCompatActivity {
 
                     }
                 });
+
 
 
             }
