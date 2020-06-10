@@ -14,14 +14,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
+import br.com.petshopsi.classes.CadastrarServico;
+
 public class CadastrarServicoActivity extends AppCompatActivity {
 
-    private EditText editServico,editdDscricao,editValor,editObs;
-    private Button save;
+    EditText editServico,editdDscricao,editValor,editObs;
+    Button save;
+
+    // USA CLASSE CADASTRAR SERVICO
+    private CadastrarServico serv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +46,20 @@ public class CadastrarServicoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                HashMap<String,Object> map = new HashMap<>();
-                map.put("Serviço",editServico.getText().toString());
-                map.put("Descrição",editdDscricao.getText().toString());
-                map.put("Valor",editValor.getText().toString());
-                map.put("Observação",editObs.getText().toString());
+                String servico = editServico.getText().toString();
+                String descricao = editdDscricao.getText().toString();
+                String valor = editValor.getText().toString();
+                String obs = editObs.getText().toString();
+
+                serv = new CadastrarServico();
+                serv.Servico = (servico);
+                serv.Descricao = (descricao);
+                serv.Valor = (valor);
+                serv.Obs = (obs);
+
 
                 FirebaseDatabase.getInstance().getReference().child("Cadastrar Serviço").push()
-                        .setValue(map)
+                        .setValue(serv)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
