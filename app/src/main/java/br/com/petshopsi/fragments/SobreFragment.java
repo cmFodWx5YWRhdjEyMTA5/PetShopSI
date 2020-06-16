@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import br.com.petshopsi.AnimaisCadastradosActivity;
 import br.com.petshopsi.CadastrarAnimalActivity;
 import br.com.petshopsi.LoginActivity;
 import br.com.petshopsi.R;
@@ -48,7 +49,7 @@ public class SobreFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sobre, container, false);
 
         MaterialButton btnSair = (MaterialButton)view.findViewById(R.id.btnSair);
-        Button btnTelaCadastrarAnimal = (Button)view.findViewById(R.id.btnTelaCadastrarAnimal);
+        Button btnanimais = (Button)view.findViewById(R.id.btnanimais);
 
         final TextView txtNome = (TextView)view.findViewById(R.id.txtNome);
         final TextView txtPerfil = (TextView)view.findViewById(R.id.txtPerfil);
@@ -60,10 +61,10 @@ public class SobreFragment extends Fragment {
             }
         });
 
-        btnTelaCadastrarAnimal.setOnClickListener(new View.OnClickListener() {
+        btnanimais.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CadastrarAnimalActivity.class);
+                Intent intent = new Intent(getActivity(), AnimaisCadastradosActivity.class);
                 startActivity(intent);
             }
         });

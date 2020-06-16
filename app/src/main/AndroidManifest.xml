@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CadastrarAnimalActivity"></activity>
+        <activity android:name=".TelaCrudAnimaisActivity"></activity>
+        <activity android:name=".AnimaisCadastradosActivity" />
+        <activity android:name=".CadastrarAnimalActivity" />
         <activity android:name=".TesteActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".HomeClienteNavActivity" />
@@ -58,7 +60,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.petshopsi.MainActivity" />
         </activity> <!-- ACTIVITY PADRAO -->
-
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

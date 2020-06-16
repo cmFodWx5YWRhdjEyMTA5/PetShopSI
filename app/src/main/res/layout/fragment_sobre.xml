@@ -36,10 +36,10 @@
             app:icon="@drawable/ic_sair_branco_24dp" />
 
         <Button
-            android:id="@+id/btnTelaCadastrarAnimal"
+            android:id="@+id/btnanimais"
             android:layout_width="216dp"
             android:layout_height="wrap_content"
-            android:text="Cadastrar Animal" />
+            android:text="Animais" />
 
 
     </LinearLayout>
