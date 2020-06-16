@@ -38,6 +38,7 @@ public class AnimaisCadastradosActivity extends AppCompatActivity {
     private FloatingActionButton btn_fab;
 
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -87,10 +88,11 @@ public class AnimaisCadastradosActivity extends AppCompatActivity {
                     for (DataSnapshot dados: dataSnapshot.getChildren()){
                         Animal animal = dados.getValue(Animal.class);
                         animais.add(animal);
+
                     }
                     adapter.notifyDataSetChanged();
                 }catch (Exception e){
-                    Toast.makeText(AnimaisCadastradosActivity.this, "Erro Exceção", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AnimaisCadastradosActivity.this, "Ainda não existem animais cadastrados.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -109,19 +111,20 @@ public class AnimaisCadastradosActivity extends AppCompatActivity {
 
                 // PEGANDO EMAIL DO CLIENTE E CODIFICANDO EM BASE64
                 String uidAnimal = animal.getEmailCliente();
-                //String uidCampanha = cartao.getCampanha();
+
                 identificadorAnimal = Base64Custom.codificarBase64(uidAnimal);
 
 
                 Intent intent = new Intent(AnimaisCadastradosActivity.this, TelaCrudAnimaisActivity.class);
-//                intent.putExtra("nomeCampanha", cartao.getCampanha());
-//                intent.putExtra("emailCliente", cartao.getCliente());
-//                intent.putExtra("descricaoCampanha", cartao.getDescricaoCampanha());
-//                intent.putExtra("nomeEmpresa", cartao.getEmpresa());
-//                intent.putExtra("nomeProduto", cartao.getNomeProduto());
-//                intent.putExtra("selosMarcados", cartao.getSelosMarcados());
-//                intent.putExtra("selosTotal", cartao.getSelosTotal());
-//                intent.putExtra("status", cartao.getStatus());
+
+                intent.putExtra("idAnimal", animal.getId());
+                intent.putExtra("emailCliente", animal.getEmailCliente());
+                intent.putExtra("nomeAnimal", animal.getNomeAnimal());
+                intent.putExtra("especieAnimal", animal.getEspecieAnimal());
+                intent.putExtra("racaAnimal", animal.getRaca());
+                intent.putExtra("idadeAnimal", animal.getIdade());
+                intent.putExtra("corAnimal", animal.getCor());
+                intent.putExtra("porteAnimal", animal.getPorte());
                 startActivity(intent);
 
                 /* Debug para testar se o clique no item da lista pega o email em base64 */

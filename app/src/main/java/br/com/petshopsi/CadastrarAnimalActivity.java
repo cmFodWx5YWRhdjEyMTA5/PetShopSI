@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.UUID;
+
 import br.com.petshopsi.classes.Animal;
 import br.com.petshopsi.classes.Cliente;
 import br.com.petshopsi.classes.ConfiguracaoFirebase;
@@ -128,14 +130,12 @@ public class CadastrarAnimalActivity extends AppCompatActivity {
                             String email = usuarioCliente.getEmail();
                             //usuarioFirebase.getCurrentUser().getEmail();
 
-                            firebase = ConfiguracaoFirebase.getFirebase();
-                            firebase = firebase.child("Animal")
-                                    .child(identificadorContato)
-                                    .child(identificadorAnimal);
+
 
                             animal = new Animal();
-                            animal.setId(identificadorAnimal);
+                            animal.setId(UUID.randomUUID().toString());
                             animal.setNomeAnimal(nomeAnimal);
+                            animal.setEmailCliente(emailUsuarioLogado);
                             animal.setEspecieAnimal(especieAnimal);
                             animal.setRaca(raca);
                             animal.setIdade(idade);
@@ -145,6 +145,9 @@ public class CadastrarAnimalActivity extends AppCompatActivity {
                             animal.setEmailCliente(email);
                             animal.setCpfCliente(cpf);
 
+                            firebase = ConfiguracaoFirebase.getFirebase();
+                            firebase = firebase.child("Animal")
+                                    .child(identificadorContato).child(animal.getId());
                             firebase.setValue(animal);
 
                             Toast.makeText(CadastrarAnimalActivity.this, "Animal salvo com sucesso!", Toast.LENGTH_SHORT).show();
