@@ -102,7 +102,7 @@ public class CadastrarClienteActivity extends AppCompatActivity {
                         return;
                     }
                     if (senha.isEmpty() == true){
-                        edtEmail.setError("Informe sua senha");
+                        edtSenha.setError("Informe sua senha");
                         return;
                     }
                     if (dataNascimento.isEmpty() == true){

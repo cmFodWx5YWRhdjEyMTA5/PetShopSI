@@ -16,9 +16,16 @@
 
         <activity android:name=".TesteActivity"></activity>
 
+        <activity android:name=".LoginClienteActivity"></activity>
+        <activity android:name=".LoginFuncionarioActivity"></activity>
+
         <activity android:name=".MainActivity" />
         <activity android:name=".HomeClienteNavActivity" />
+
         <activity android:name=".CarregarPerfilActivity" />
+        <activity android:name=".CarregarPerfilClienteActivity" />
+        <activity android:name=".CarregarPerfilFuncionarioActivity"></activity>
+
         <activity
             android:name=".CadastraFuncionario"
             android:label="@string/tela_cadastrar_cliente"

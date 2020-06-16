@@ -1,11 +1,11 @@
 package br.com.petshopsi.classes;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 
 public class Funcionario{
 
-    private String id, nome, funcao, cpf, rg;
-    private  int pis, matricula;
+    private String id, nome, funcao, cpf, rg,pis, matricula,email,senha,perfil;
 
     public void salvar(){
         DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
@@ -15,6 +15,7 @@ public class Funcionario{
     public Funcionario() {
     }
 
+    @Exclude
     public String getId() {
         return id;
     }
@@ -55,19 +56,43 @@ public class Funcionario{
         this.rg = rg;
     }
 
-    public int getPis() {
+    public String getPis() {
         return pis;
     }
 
-    public void setPis(int pis) {
+    public void setPis(String pis) {
         this.pis = pis;
     }
 
-    public int getMatricula() {
+    public String getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(int matricula) {
+    public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
     }
 }

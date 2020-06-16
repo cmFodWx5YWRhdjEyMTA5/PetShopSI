@@ -3,7 +3,9 @@ package br.com.petshopsi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,7 +20,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import br.com.petshopsi.helper.Base64Custom;
+import br.com.petshopsi.classes.Cliente;
 import br.com.petshopsi.classes.ConfiguracaoFirebase;
+import br.com.petshopsi.classes.Funcionario;
 
 public class CarregarPerfilActivity extends AppCompatActivity {
 
@@ -27,13 +36,15 @@ public class CarregarPerfilActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
     ImageView patinhaUm,patinhaDois,patinhaTres,patinhaQuatro;
 
-    // AUTENTICACAO
-    private FirebaseAuth mAuth;
-    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    //Pegar o usuario corrente
-    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-    //Referência do banco
-    private DatabaseReference databaseRef;
+    String identificadorUsuario;
+    private DatabaseReference firebase;
+    private FirebaseAuth usuarioFirebase;
+    private ArrayAdapter adapter;
+    private ArrayList<Cliente> clientes;
+    private ArrayList<Funcionario> funcionarios;
+    private ValueEventListener valueEventListenerUsuarios;
+    Cliente cliente;
+    Funcionario funcionario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,10 @@ public class CarregarPerfilActivity extends AppCompatActivity {
         patinhaDois = (ImageView)findViewById(R.id.patinhaDois);
         patinhaTres = (ImageView)findViewById(R.id.patinhaTres);
         patinhaQuatro = (ImageView)findViewById(R.id.patinhaQuatro);
+
+
+        // FIREBASE AUTH
+        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
         progressBarPerfil = (ProgressBar)findViewById(R.id.progressBarPerfil);
         new Thread(new Runnable() {
@@ -85,58 +100,79 @@ public class CarregarPerfilActivity extends AppCompatActivity {
 
 
 
+
     }
 
     private void VerificaPerfilUsuario() {
 
         progressBarPerfil.setVisibility(View.VISIBLE);
 
-        String uid = firebaseAuth.getUid();
-        databaseRef = ConfiguracaoFirebase.getFirebase().child("Usuario").child(uid);
-
-
-        // Verifica se usuário está logado e conta ativada
+        /*// Verifica se usuário está logado e contata ativada
         if (firebaseAuth != null){
-
-            databaseRef.addValueEventListener(new ValueEventListener() {
+            databaseRefClientes.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String perfil = String.valueOf(dataSnapshot.child("perfil").getValue().toString());
+                    try {
 
-                    // By pass devido a variavel perfil esta nula
-                    if (perfil == null){
-                        Intent intentMCli = new Intent(CarregarPerfilActivity.this, HomeClienteNavActivity.class);
-                        startActivity(intentMCli);
-                        Toast.makeText(CarregarPerfilActivity.this, "Login efetuado!", Toast.LENGTH_SHORT).show();
-                        progressBarPerfil.setVisibility(View.GONE);
-                        finish();
-                    }
+                        for (DataSnapshot data : dataSnapshot.getChildren()){
+                            cliente = data.getValue(Cliente.class);
+                            String perfil = cliente.getPerfil();
 
-                    if(perfil.equals("Cliente") == true){
+                            if(perfil.equals("Cliente") == true){
 
-                        Intent intentMCli = new Intent(CarregarPerfilActivity.this, HomeClienteNavActivity.class);
-                        startActivity(intentMCli);
-                        Toast.makeText(CarregarPerfilActivity.this, "Login efetuado!", Toast.LENGTH_SHORT).show();
-                        progressBarPerfil.setVisibility(View.GONE);
-                        finish();
+                                Intent intentMCli = new Intent(CarregarPerfilActivity.this, HomeClienteNavActivity.class);
+                                startActivity(intentMCli);
+                                Toast.makeText(CarregarPerfilActivity.this, "Sou: " + perfil, Toast.LENGTH_SHORT).show();
+                                progressBarPerfil.setVisibility(View.GONE);
+                                finish();
 
-                    } else if (perfil.equals("Funcionario") == true){
+                            } else{
 
-                        Toast.makeText(CarregarPerfilActivity.this, "Tela em construção!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        finish();
+                                Toast.makeText(CarregarPerfilActivity.this, "Contate o administrador", Toast.LENGTH_SHORT).show();
+                                progressBarPerfil.setVisibility(View.GONE);
+                                finish();
 
-                        /*Intent intentMFunc = new Intent(CarregarPerfilActivity.this, HomeFuncionarioNavActivity.class);
-                        startActivity(intentMFunc);
-                        Toast.makeText(CarregarPerfilActivity.this, "Login efetuado!", Toast.LENGTH_SHORT).show();
-                        progressBarPerfil.setVisibility(View.GONE);
-                        finish();*/
+                            }
+                        }
 
-                    } else{
+                    }catch (Exception e){
+                        Toast.makeText(CarregarPerfilActivity.this, "Exceção Cliente", Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(CarregarPerfilActivity.this, "Contate o administrador", Toast.LENGTH_SHORT).show();
-                        progressBarPerfil.setVisibility(View.GONE);
-                        finish();
+                        databaseRefFuncionarios.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                try {
+                                    for (DataSnapshot data : dataSnapshot.getChildren()){
+                                        funcionario = data.getValue(Funcionario.class);
+                                        String perfil = funcionario.getPerfil();
+
+                                        if(perfil.equals("Funcionario") == true){
+
+                                            Intent intentMCli = new Intent(CarregarPerfilActivity.this, HomeClienteNavActivity.class);
+                                            startActivity(intentMCli);
+                                            Toast.makeText(CarregarPerfilActivity.this, "Sou: " + perfil, Toast.LENGTH_SHORT).show();
+                                            progressBarPerfil.setVisibility(View.GONE);
+                                            finish();
+
+                                        } else{
+
+                                            Toast.makeText(CarregarPerfilActivity.this, "Contate o administrador", Toast.LENGTH_SHORT).show();
+                                            progressBarPerfil.setVisibility(View.GONE);
+                                            finish();
+
+                                        }
+                                    }
+                                }catch (Exception e){
+                                    Toast.makeText(CarregarPerfilActivity.this, "Exceção Funcionários", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
 
                     }
                 }
@@ -146,6 +182,10 @@ public class CarregarPerfilActivity extends AppCompatActivity {
 
                 }
             });
-        }
+
+
+
+        }*/
     }
+
 }

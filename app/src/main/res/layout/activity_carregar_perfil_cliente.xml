@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CarregarPerfilClienteActivity">
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:src="@drawable/logo3"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="140dp"
+        android:layout_height="140dp"/>
+
+    <ProgressBar
+        android:id="@+id/progressBarPerfil"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/img_logo"
+        android:progressTint="@color/colorPrimary"
+        android:layout_marginTop="10dp"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        />
+
+    <ImageView
+        android:id="@+id/patinhaUm"
+        android:src="@drawable/patinhas"
+        android:layout_marginTop="12dp"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/progressBarPerfil"
+        android:visibility="invisible"
+        android:paddingLeft="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"/>
+
+    <ImageView
+        android:id="@+id/patinhaDois"
+        android:src="@drawable/patinhas"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/patinhaUm"
+        android:visibility="invisible"
+        android:paddingLeft="-100dp"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"/>
+
+    <ImageView
+        android:id="@+id/patinhaTres"
+        android:src="@drawable/patinhas"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/patinhaDois"
+        android:visibility="invisible"
+        android:paddingLeft="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"/>
+
+    <ImageView
+        android:id="@+id/patinhaQuatro"
+        android:src="@drawable/patinhas"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/patinhaTres"
+        android:visibility="invisible"
+        android:paddingLeft="-100dp"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"/>
+
+
+</RelativeLayout>
