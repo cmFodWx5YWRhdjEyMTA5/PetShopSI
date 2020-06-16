@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Intent intent = new Intent(LoginActivity.this, CadastrarClienteActivity.class);
                 // TESTE CRIAR SERVICO
-                Intent intent = new Intent(LoginActivity.this, CadastrarServicoActivity.class);
+                Intent intent = new Intent(LoginActivity.this, CadastrarClienteActivity.class);
                 startActivity(intent);
                 finish();
             }
