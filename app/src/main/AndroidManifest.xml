@@ -3,8 +3,8 @@
     package="br.com.petshopsi">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
@@ -13,9 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".TesteActivity"></activity>
-
+        <activity android:name=".CadastrarAnimalActivity"></activity>
+        <activity android:name=".TesteActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".HomeClienteNavActivity" />
         <activity android:name=".CarregarPerfilActivity" />
@@ -58,9 +57,8 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.petshopsi.MainActivity" />
-        </activity>
+        </activity> <!-- ACTIVITY PADRAO -->
 
-        <!-- ACTIVITY PADRAO -->
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

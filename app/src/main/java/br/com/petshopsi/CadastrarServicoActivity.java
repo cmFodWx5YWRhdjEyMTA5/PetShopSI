@@ -22,7 +22,7 @@ import br.com.petshopsi.classes.Servico;
 
 public class CadastrarServicoActivity extends AppCompatActivity {
 
-    private EditText editServico,editdDscricao,editValor,editObs;
+    private EditText editServico,editDescricao,editValor,editObs;
     private Button save;
     Servico servico;
     // Variaveis do Firebase
@@ -35,7 +35,7 @@ public class CadastrarServicoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cadastrar_servico);
 
         editServico = findViewById(R.id.editServico);
-        editdDscricao = findViewById(R.id.editdDscricao);
+        editDescricao = findViewById(R.id.editDescricao);
         editValor = findViewById(R.id.editValor);
         editObs = findViewById(R.id.editObs);
         save = findViewById(R.id.save);
@@ -49,7 +49,7 @@ public class CadastrarServicoActivity extends AppCompatActivity {
 
                 try {
                     String nomeServico = editServico.getText().toString();
-                    String descricao = editdDscricao.getText().toString();
+                    String descricao = editDescricao.getText().toString();
                     String obs = editObs.getText().toString();
                     String valorServico = editValor.getText().toString();
                     Double valor = Double.parseDouble(valorServico);
@@ -69,7 +69,7 @@ public class CadastrarServicoActivity extends AppCompatActivity {
                     servico = new Servico();
                     servico.setId(UUID.randomUUID().toString());
                     servico.setServico(editServico.getText().toString());
-                    servico.setDescricao(editdDscricao.getText().toString());
+                    servico.setDescricao(editDescricao.getText().toString());
                     servico.setObservacao(editObs.getText().toString());
                     servico.setValor(valor);
                     servico.salvar();
