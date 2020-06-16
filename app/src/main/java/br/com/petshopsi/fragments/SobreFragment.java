@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -19,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import br.com.petshopsi.AnimaisCadastradosActivity;
+import br.com.petshopsi.CadastrarAnimalActivity;
 import br.com.petshopsi.LoginActivity;
 import br.com.petshopsi.R;
 import br.com.petshopsi.classes.ConfiguracaoFirebase;
@@ -46,6 +49,8 @@ public class SobreFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sobre, container, false);
 
         MaterialButton btnSair = (MaterialButton)view.findViewById(R.id.btnSair);
+        Button btnanimais = (Button)view.findViewById(R.id.btnanimais);
+
         final TextView txtNome = (TextView)view.findViewById(R.id.txtNome);
         final TextView txtPerfil = (TextView)view.findViewById(R.id.txtPerfil);
 
@@ -53,6 +58,14 @@ public class SobreFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 doLogout();
+            }
+        });
+
+        btnanimais.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AnimaisCadastradosActivity.class);
+                startActivity(intent);
             }
         });
 

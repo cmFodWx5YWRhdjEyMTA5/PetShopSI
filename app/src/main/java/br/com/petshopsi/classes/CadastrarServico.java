@@ -1,49 +1,60 @@
 package br.com.petshopsi.classes;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+
 public class CadastrarServico {
 
-    public String Servico, Descricao, Valor, Obs;
+    public String id, servico, descricao, valor, obs;
+
 
     public CadastrarServico() {
     }
 
-    public CadastrarServico(String Servico, String Descricao, String Valor, String Obs) {
-        this.Servico = Servico;
-        this.Descricao = Descricao;
-        this.Valor = Valor;
-        this.Obs = Obs;
+    public void salvar(){
+        DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
+        referenciaFirebase.child("Servicos'").child(getId()).setValue(CadastrarServico.this);
+    }
+
+    @Exclude
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getServico() {
-        return Servico;
+        return servico;
     }
 
     public void setServico(String Servico) {
-        this.Servico = Servico;
+        this.servico = servico;
     }
 
     public String getDescricao() {
-        return Descricao;
+        return descricao;
     }
 
     public void setDescricao(String Descricao) {
-        this.Descricao = Descricao;
+        this.descricao = descricao;
     }
 
     public String getValor() {
-        return Valor;
+        return valor;
     }
 
     public void setValor(String Valor) {
-        this.Valor = Valor;
+        this.valor = valor;
     }
 
     public String getObs() {
-        return Obs;
+        return obs;
     }
 
     public void setObs(String Obs) {
-        this.Obs = Obs;
+        this.obs = obs;
     }
 
 }
