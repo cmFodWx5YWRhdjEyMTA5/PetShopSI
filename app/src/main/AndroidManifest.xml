@@ -3,6 +3,8 @@
     package="br.com.petshopsi">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -11,8 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".Login" />
+
+        <activity android:name=".TesteActivity"></activity>
+
+        <activity android:name=".MainActivity" />
+        <activity android:name=".HomeClienteNavActivity" />
+        <activity android:name=".CarregarPerfilActivity" />
         <activity
             android:name=".CadastraFuncionario"
             android:label="@string/tela_cadastrar_cliente"
@@ -54,9 +60,8 @@
                 android:value="br.com.petshopsi.MainActivity" />
         </activity>
 
-        <activity android:name=".Retrieve" />
-
-        <activity android:name=".HomeClienteNavActivity">
+        <!-- ACTIVITY PADRAO -->
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

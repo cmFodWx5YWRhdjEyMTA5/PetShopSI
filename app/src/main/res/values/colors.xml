@@ -6,5 +6,7 @@
 
     <!-- CORES BACKGROUND -->
     <color name="branco">#ffffff</color>
+    <color name="preto">#000000</color>
     <color name="colorGray">#B4BABA</color>
+    <color name="colorAmareloClaro">#EFEBC2</color>
 </resources>

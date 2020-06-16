@@ -5,7 +5,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,11 +37,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.petshopsi.classes.SolicitarServico;
+import br.com.petshopsi.classes.Cliente;
+import br.com.petshopsi.classes.ConfiguracaoFirebase;
+import br.com.petshopsi.classes.Servico;
+import br.com.petshopsi.classes.ServicosSolicitados;
+import br.com.petshopsi.helper.Base64Custom;
+import br.com.petshopsi.helper.Preferencias;
 
 public class SolicitarServicoActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, DialogInterface.OnCancelListener{
 
     private Spinner spinner;
+    private Spinner spinnerServico;
     private CheckBox checkBoxTransporte;
     private TextView tv_dataSolicitacao;
     private TextView tv_horaSolicitacao;
@@ -51,18 +58,28 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
     private String ServicoSelecionado;
     private EditText edtValorServico;
 
-    ListView listView;
-    FirebaseDatabase database;
-    DatabaseReference ref;
+
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
-    Servico servico;
-    private SolicitarServico solicitarServico;
 
-    // USANDO REFERENCIA DO FIREBASE
-    private DatabaseReference referenciaFirebase;
-    // USANDO REFERENCIA DO FirebaseAuth
-    private FirebaseAuth autenticacao;
+    ArrayList<String> listServico;
+    ArrayAdapter<String> adapterServico;
+    Servico servico;
+    FirebaseDatabase database;
+    DatabaseReference ref;
+
+    String identificadorContato;
+    private FirebaseAuth clienteFirebase;
+    private DatabaseReference firebase;
+
+
+
+
+    // MODO ESTATICO DOS NOMES DOS SERVICOS
+    private String servico1 = "Tosa";
+    private String servico2 = "Banho";
+    private String servico3 = "Tosa e Banho";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +88,7 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
 
         // cast
         spinner = (Spinner) findViewById(R.id.spinner);
+        spinnerServico = (Spinner) findViewById(R.id.spinnerServico);
         checkBoxTransporte = (CheckBox) findViewById(R.id.checkTransporte);
         tv_dataSolicitacao = (TextView) findViewById(R.id.tv_dataSolicitacao);
         tv_horaSolicitacao = (TextView) findViewById(R.id.tv_horaSolicitacao);
@@ -78,17 +96,11 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
         btnSolicitarServico = (Button) findViewById(R.id.btnSolicitarServico);
         edtValorServico = (EditText) findViewById(R.id.edtValorServico);
 
-
-
-
-        listView = (ListView) findViewById(R.id.listView);
-
+        // DADOS DOS SERVICOS CADASTRADOS NO SPINNER
         database = FirebaseDatabase.getInstance();
-        ref = database.getReference("Usuario");
-
-
+        ref = database.getReference("Servicos");
         list = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(this, R.layout.servico_info,R.id.servicoInfo, list);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -97,12 +109,11 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
                 for(DataSnapshot data: dataSnapshot.getChildren()){
 
                     servico = data.getValue(Servico.class);
-                    //servico.toString();
-                    // servico = ds.getValue(Servico.class);
-                    list.add(servico.getNome().toString());
+                    list.add(servico.getServico().toString());
                 }
 
-                listView.setAdapter(adapter);
+                spinnerServico.setAdapter(adapter);
+
             }
 
             @Override
@@ -111,28 +122,19 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
             }
         });
 
-        //Pega o servico selecionado no ListView e salva em uma variável
-/*        listViewServicos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ServicoSelecionado = parent.getItemAtPosition(position).toString();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
 
 
+
+
+
+        // CHECK BOX TRANSPORTE HABILITA O SPINNER DA MODALIDADE
         List<String> list = new ArrayList<String>();
         list.add("");
         list.add("Busca");
         list.add("Entrega");
         list.add("Busca e Entrega");
 
-
+        // MOSTRA OS DADOS ACIMA NO SPINNER DE TRANSPORTE
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -185,24 +187,68 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
         btnSolicitarServico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
 
-                    String valorServico = edtValorServico.getText().toString();
-                    String dataServico = tv_dataSolicitacao.getText().toString();
-                    String horaServico = tv_horaSolicitacao.getText().toString();
+                // RECEBE SERVICO DE UMA VARIAVEL ESTATICA
+                final String servico = servico1;
 
-                    solicitarServico = new SolicitarServico();
-                    solicitarServico.setServicoSelecionado(ServicoSelecionado);
-                    solicitarServico.setTransporteSelecionado(transporteSelecionado);
-                    solicitarServico.setDataServico(dataServico);
-                    solicitarServico.setHoraServico(horaServico);
-                    solicitarServico.setValorServico(valorServico);
-                    solicitarServico.setId(UUID.randomUUID().toString());
-                    cadastrarSolicitacaoServico();
+                if (servico.isEmpty()) {
+                    Toast.makeText(SolicitarServicoActivity.this, "Serviço esta vazio!", Toast.LENGTH_SHORT).show();
+                }else{
+
+                    identificadorContato = Base64Custom.codificarBase64(servico);
+
+                    //recuperar instancia Firebase
+                    firebase = ConfiguracaoFirebase.getFirebase().child("Usuarios").child(identificadorContato);
+                    firebase.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            // VERIFICA SE JA TEM DADOS DO USUARIO SALVO NO BD
+                            if (dataSnapshot.getValue() != null){
+
+                                // RECUPERAR DADOS DO SERVICO A SER ADICIONADO
+                                Cliente clienteContato = dataSnapshot.getValue(Cliente.class);
 
 
-                }catch (Exception ex){
-                    Toast.makeText(SolicitarServicoActivity.this, "Ocorreu um erro, tente novamente mais tarde!", Toast.LENGTH_SHORT).show();
+                                // RECUPERAR IDENTIFICADOR DO USUARIO
+                                Preferencias preferencias = new Preferencias(SolicitarServicoActivity.this);
+                                String identificadorUsuarioLogador = preferencias.getIdentificador();
+                                clienteFirebase.getCurrentUser().getEmail();
+                                firebase = ConfiguracaoFirebase.getFirebase();
+                                firebase = firebase.child("ServicosSolicitados")
+                                        .child(identificadorUsuarioLogador)
+                                        .child(identificadorContato);
+
+                                String valorServico = edtValorServico.getText().toString();
+                                String dataServico = tv_dataSolicitacao.getText().toString();
+                                String horaServico = tv_horaSolicitacao.getText().toString();
+                                // Convertendo variavel valorServico para Double
+                                Double valor = Double.parseDouble(valorServico);
+
+                                ServicosSolicitados ss = new ServicosSolicitados();
+                                ss.setIdentificadorUsuario(identificadorContato);
+                                ss.setServico(servico);
+                                ss.setTransporte(transporteSelecionado);
+                                ss.setData(dataServico);
+                                ss.setHora(horaServico);
+                                ss.setValor(valor);
+
+                                firebase.setValue(ss);
+
+                                Toast.makeText(SolicitarServicoActivity.this, "Serviço salvo com sucesso!", Toast.LENGTH_SHORT).show();
+
+                                abrirHomeCliente();
+
+                            }else {
+                                Toast.makeText(SolicitarServicoActivity.this, "Serviço não cadastrado!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             }
         });
@@ -316,16 +362,16 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
     }
     //metódo para enviar a campanha para o firebase
 
-    private void cadastrarSolicitacaoServico() {
+    /*private void cadastrarSolicitacaoServico() {
 
         solicitarServico.salvar();
         feedbackCadastroSucesso();
 
-    }
+    }*/
 
     public void feedbackCadastroSucesso(){
         AlertDialog.Builder builderFeedbackSucesso = new AlertDialog.Builder(SolicitarServicoActivity.this);
-        builderFeedbackSucesso.setMessage("Cadastro de campanha realizado com sucesso!");
+        builderFeedbackSucesso.setMessage("Serviço agendado com sucesso!");
         builderFeedbackSucesso.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -337,6 +383,12 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
         builderFeedbackSucesso.setCancelable(false);
         AlertDialog alertFeedbackSucesso = builderFeedbackSucesso.create();
         alertFeedbackSucesso.show();
+    }
+
+    public void abrirHomeCliente(){
+        Intent intent = new Intent(SolicitarServicoActivity.this, HomeClienteNavActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

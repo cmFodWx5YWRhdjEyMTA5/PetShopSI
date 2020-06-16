@@ -8,6 +8,8 @@
     android:background="@color/branco"
     tools:context=".MainActivity">
 
+
+
     <Button
         android:id="@+id/btnTelaCadastrarCliente"
         android:layout_width="match_parent"
@@ -59,5 +61,39 @@
         app:layout_constraintTop_toBottomOf="@+id/btnCadastrarServico"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/txtNomex"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintTop_toBottomOf="@+id/btnCadastrarFuncionario"
+        app:layout_constraintStart_toStartOf="@+id/btnCadastrarFuncionario"
+        />
+
+    <TextView
+        android:id="@+id/txtPerfilx"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/txtNomex"
+        app:layout_constraintStart_toStartOf="@+id/txtNomex"
+        />
+
+    <TextView
+        android:id="@+id/txtData"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/txtPerfilx"
+        app:layout_constraintStart_toStartOf="@+id/txtPerfilx"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

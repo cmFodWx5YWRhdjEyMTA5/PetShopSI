@@ -21,13 +21,24 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class Login extends AppCompatActivity {
+import br.com.petshopsi.classes.Cliente;
+import br.com.petshopsi.classes.ConfiguracaoFirebase;
+import br.com.petshopsi.classes.Funcionario;
+import br.com.petshopsi.helper.Base64Custom;
+import br.com.petshopsi.helper.Preferencias;
+
+public class LoginActivity extends AppCompatActivity {
+
     EditText mEmail,mPassword;
     Button mLoginBtn;
-    TextView mCreateBtn,forgotTextLink;
+    TextView mCreateBtn,forgotTextLink,criarConta;
     ProgressBar progressBar;
-    FirebaseAuth fAuth;
+    private FirebaseAuth autenticacao;
+    private FirebaseAuth fAuth;
+    Cliente cliente;
+    Funcionario funcionario;
 
 
     @Override
@@ -35,13 +46,16 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // VERIFICA USUARIO LOGADO
+        verificarUsuarioLogado();
+
         mEmail = findViewById(R.id.Email);
         mPassword = findViewById(R.id.password);
         progressBar = findViewById(R.id.progressBar);
-        fAuth = FirebaseAuth.getInstance();
         mLoginBtn = findViewById(R.id.loginBtn);
         mCreateBtn = findViewById(R.id.createText);
         forgotTextLink = findViewById(R.id.forgotPassword);
+        criarConta = (TextView)findViewById(R.id.criarConta);
 
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
@@ -70,29 +84,16 @@ public class Login extends AppCompatActivity {
 
                 // authenticate the user
 
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                        }else {
-                            Toast.makeText(Login.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
+                cliente = new Cliente();
+                cliente.setEmail(email);
+                cliente.setSenha(password);
 
-                    }
-                });
+                validarLogin();
 
             }
         });
 
-       /* mCreateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Register.class));
-            }
-        });*/
+
 
         forgotTextLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,12 +113,12 @@ public class Login extends AppCompatActivity {
                         fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(Login.this, "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(Login.this, "Error ! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Error ! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -136,6 +137,68 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        criarConta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(LoginActivity.this, CadastrarClienteActivity.class);
+                // TESTE CRIAR SERVICO
+                Intent intent = new Intent(LoginActivity.this, CadastrarServicoActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
     }
+
+    private void validarLogin(){
+        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        autenticacao.signInWithEmailAndPassword(
+                cliente.getEmail(),
+                cliente.getSenha()
+        )
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            // ESTUDO FIREBASE
+                            Preferencias preferencias = new Preferencias(LoginActivity.this);
+                            String identificadorUsuarioLogado = Base64Custom.codificarBase64(cliente.getEmail());
+                            preferencias.salvarDados(identificadorUsuarioLogado);
+
+                            //FirebaseUser user = mAuth.getCurrentUser();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            finish();
+
+
+                            abrirTelaPrincipal();
+
+                            Toast.makeText(LoginActivity.this, "Sucesso ao fazer login.",
+                                    Toast.LENGTH_SHORT).show();
+
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(LoginActivity.this, "Erro ao fazer login.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
+
+    private void verificarUsuarioLogado(){
+        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        if (autenticacao.getCurrentUser() != null){
+            abrirTelaPrincipal();
+        }
+    }
+
+    private void abrirTelaPrincipal(){
+        Intent intent = new Intent(LoginActivity.this, HomeClienteNavActivity.class);
+        startActivity(intent);
+    }
+
+
 }

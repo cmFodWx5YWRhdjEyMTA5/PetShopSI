@@ -1,32 +1,38 @@
 package br.com.petshopsi;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
+import java.util.UUID;
+
+import br.com.petshopsi.classes.Servico;
+
 
 public class CadastrarServicoActivity extends AppCompatActivity {
 
     private EditText editServico,editdDscricao,editValor,editObs;
     private Button save;
+    Servico servico;
+    // Variaveis do Firebase
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cadastraservico);
+        setContentView(R.layout.activity_cadastrar_servico);
 
         editServico = findViewById(R.id.editServico);
         editdDscricao = findViewById(R.id.editdDscricao);
@@ -34,43 +40,60 @@ public class CadastrarServicoActivity extends AppCompatActivity {
         editObs = findViewById(R.id.editObs);
         save = findViewById(R.id.save);
 
+        // Add
+        inicializaFirebase();
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
 
-                HashMap<String,Object> map = new HashMap<>();
-                map.put("Serviço",editServico.getText().toString());
-                map.put("Descrição",editdDscricao.getText().toString());
-                map.put("Valor",editValor.getText().toString());
-                map.put("Observação",editObs.getText().toString());
+                try {
+                    String nomeServico = editServico.getText().toString();
+                    String descricao = editdDscricao.getText().toString();
+                    String obs = editObs.getText().toString();
+                    String valorServico = editValor.getText().toString();
+                    Double valor = Double.parseDouble(valorServico);
 
-                FirebaseDatabase.getInstance().getReference().child("Cadastrar Serviço").push()
-                        .setValue(map)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.i("jfbvkj", "onComplete: ");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.i("jfbvkj", "onFailure: "+e.toString());
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(CadastrarServicoActivity.this, "Serviço cadastrado com sucesso.", Toast.LENGTH_SHORT).show();
-                        editServico.getText().clear();
-                        editdDscricao.getText().clear();
-                        editValor.getText().clear();
-                        editObs.getText().clear();
+                    if (nomeServico.trim().equals("")){
+                        editServico.requestFocus();
+                        editServico.setError("Informe o nome do Serviço!");
+                        return;
                     }
-                });
 
+                    if (valorServico.trim().equals("") == true){
+                        editValor.requestFocus();
+                        editValor.setError("Informe um valor!");
+                        return;
+                    }
+
+                    servico = new Servico();
+                    servico.setId(UUID.randomUUID().toString());
+                    servico.setServico(editServico.getText().toString());
+                    servico.setDescricao(editdDscricao.getText().toString());
+                    servico.setObservacao(editObs.getText().toString());
+                    servico.setValor(valor);
+                    servico.salvar();
+                }catch (Exception ex){
+                    editValor.requestFocus();
+                    editValor.setError("Campo vazio ou caracteres inválidos");
+                    Toast.makeText(getApplicationContext(),"O valor deve possuir números",Toast.LENGTH_LONG).show();
+                }
 
             }
         });
 
     }
+
+    private void inicializaFirebase() {
+        FirebaseApp.initializeApp(CadastrarServicoActivity.this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+    }
+
+    public void abrirTelaHome(){
+        Intent intent = new Intent(CadastrarServicoActivity.this, HomeClienteNavActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
 }

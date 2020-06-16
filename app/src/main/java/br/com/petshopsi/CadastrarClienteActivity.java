@@ -8,6 +8,7 @@ import androidx.core.app.NavUtils;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -23,6 +24,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import br.com.petshopsi.classes.ConfiguracaoFirebase;
 
 import br.com.petshopsi.classes.Cliente;
+import br.com.petshopsi.helper.Base64Custom;
+import br.com.petshopsi.helper.Preferencias;
 
 public class CadastrarClienteActivity extends AppCompatActivity {
 
@@ -40,10 +46,8 @@ public class CadastrarClienteActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     // USA CLASSE CLIENTE
-    private Cliente cliente;
+    Cliente cliente;
 
-    // USANDO REFERENCIA DO FIREBASE
-    private DatabaseReference referenciaFirebase;
     // USANDO REFERENCIA DO FirebaseAuth
     private FirebaseAuth autenticacao;
 
@@ -54,7 +58,7 @@ public class CadastrarClienteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_cliente);
 
-
+        // CASTs
         edtNome = (EditText)findViewById(R.id.edtNome);
         edtEndereco = (EditText)findViewById(R.id.edtEndereco);
         edtTelefone = (EditText)findViewById(R.id.edtTelefone);
@@ -111,16 +115,15 @@ public class CadastrarClienteActivity extends AppCompatActivity {
                     }
 
                     cliente = new Cliente();
-                    cliente.nome = (nome);
-                    cliente.endereco = (endereco);
-                    cliente.telefone = (telefone);
-                    cliente.email = (email);
-                    cliente.senha = (senha);
-                    cliente.data = (dataNascimento);
-                    cliente.cpf = (cpf);
-                    cliente.observacoes = (observacoes);
-
-
+                    cliente.setNome(nome);
+                    cliente.setEndereco(endereco);
+                    cliente.setTelefone(telefone);
+                    cliente.setEmail(email);
+                    cliente.setSenha(senha);
+                    cliente.setData_nascimento(dataNascimento);
+                    cliente.setCpf(cpf);
+                    cliente.setObservacoes(observacoes);
+                    cliente.setPerfil("Cliente");
                     cadastrarCliente();
 
                 } catch (Exception ex){
@@ -137,58 +140,51 @@ public class CadastrarClienteActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         autenticacao.createUserWithEmailAndPassword(
-                cliente.email,
-                cliente.senha
+                cliente.getEmail(),
+                cliente.getSenha()
         )
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(CadastrarClienteActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
                         if (task.isSuccessful()){
-                            // CADASTRA OS DADOS NO REAL DATABASE
-                            // Recebe o mesmo ID do Usuário para o cadastro no banco
-                            FirebaseUser clienteFirebase = task.getResult().getUser();
-                            cliente.id = (clienteFirebase.getUid());
+
+                            Toast.makeText(CadastrarClienteActivity.this, "Sucesso ao cadastrar cliente", Toast.LENGTH_SHORT).show();
+
+                            String identificadorUsuario = Base64Custom.codificarBase64(cliente.getEmail());
+                            cliente.setId(identificadorUsuario);
                             cliente.salvar();
 
-                            // FAZ ENVIO DO EMAIL PARA ATIVAÇÂO DE CONTA
-                            autenticacao.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        // FORÇA LOGOFF
-                                        autenticacao.signOut();
-                                        progressBar.setVisibility(View.GONE);
-                                        limparCampos();
-                                        // ALERTA DE USUÁRIO CRIADO COM SUCESSO
-                                        Toast.makeText(CadastrarClienteActivity.this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
+                            // ESTUDO FIREBASE
+                            Preferencias preferencias = new Preferencias(CadastrarClienteActivity.this);
+                            preferencias.salvarDados(identificadorUsuario);
 
-                                    }else {
-                                        progressBar.setVisibility(View.GONE);
-                                        limparCampos();
-                                        Toast.makeText(CadastrarClienteActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                            abrirLoginUsuario();
 
                         }else {
-                            // MSG DE EMAIL DUPLICADO
-                            edtEmail.setError("Esse e-mail já esta em uso.");
-                            return;
+
+                            String erroExcecao = "";
+
+                            try {
+                                throw  task.getException();
+                            } catch (FirebaseAuthWeakPasswordException e) {
+                                erroExcecao = "Digite a senha mais forte!";
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                erroExcecao = "O e-mail digitado é inválido!";
+                            } catch (FirebaseAuthUserCollisionException e) {
+                                erroExcecao = "Esse e-mail já esta em uso pelo App!";
+                            } catch (Exception e) {
+                                erroExcecao = "Ao cadastrar usuário!";
+                            }
+
+                            Toast.makeText(CadastrarClienteActivity.this, "Erro: " + erroExcecao, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    public void limparCampos(){
-        edtNome.setText("");
-        edtEndereco.setText("");
-        edtTelefone.setText("");
-        edtEmail.setText("");
-        edtSenha.setText("");
-        edtDataNascimento.setText("");
-        edtCpf.setText("");
-        edtObservacoes.setText("");
+    private void abrirLoginUsuario(){
+        Intent intent = new Intent(CadastrarClienteActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 
 }
