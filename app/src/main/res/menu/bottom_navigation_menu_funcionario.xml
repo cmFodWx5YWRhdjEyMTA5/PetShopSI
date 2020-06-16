@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/navigation_home_funcionario"
+        android:icon="@drawable/ic_home_amarelo_24dp"
+        android:title="Home"/>
+
+    <item android:id="@+id/navigation_servicos_funcionario"
+        android:icon="@drawable/ic_pets_amarelo_24dp"
+        android:title="Serviços"/>
+
+    <item android:id="@+id/navigation_pets_funcionario"
+        android:icon="@drawable/ic_sobre_amarelo_24dp"
+        android:title="Pets"/>
+
+    <item android:id="@+id/navigation_sobre_funcionario"
+        android:icon="@drawable/ic_sobre_amarelo_24dp"
+        android:title="Sobre"/>
+
+
+</menu>

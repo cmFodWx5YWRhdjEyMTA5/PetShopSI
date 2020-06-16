@@ -104,15 +104,12 @@ public class CarregarPerfilFuncionarioActivity extends AppCompatActivity {
 
                         if (perfil.equals("Funcionario") == true){
 
-                            /*Intent intentMEmp = new Intent(CarregarPerfilFuncionarioActivity.this, HomeClienteNavActivity.class);
-                            startActivity(intentMEmp);*/
-                            Toast.makeText(CarregarPerfilFuncionarioActivity.this, "Login efetuado! " + perfil, Toast.LENGTH_SHORT).show();
-                            Toast.makeText(CarregarPerfilFuncionarioActivity.this, "Deslogando, pois a tela Home Não esta pronta!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(CarregarPerfilFuncionarioActivity.this, LoginFuncionarioActivity.class);
+                            //Toast.makeText(CarregarPerfilFuncionarioActivity.this, "Login efetuado! " + perfil, Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(CarregarPerfilFuncionarioActivity.this, HomeFuncionarioNavActivity.class);
                             startActivity(intent);
-                            firebaseAuth.signOut();
                             progressBarPerfil.setVisibility(View.GONE);
-                            /*finish();*/
+                            finish();
 
                         } else{
 

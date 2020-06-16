@@ -13,22 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".TesteActivity"></activity>
-
-        <activity android:name=".LoginClienteActivity"></activity>
-        <activity android:name=".LoginFuncionarioActivity"></activity>
-
-        <activity android:name=".TelaCrudAnimaisActivity"></activity>
+        <activity android:name=".HomeFuncionarioNavActivity"></activity>
+        <activity android:name=".TesteActivity" />
+        <activity android:name=".LoginClienteActivity" />
+        <activity android:name=".LoginFuncionarioActivity" />
+        <activity android:name=".TelaCrudAnimaisActivity" />
         <activity android:name=".AnimaisCadastradosActivity" />
         <activity android:name=".CadastrarAnimalActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".HomeClienteNavActivity" />
-
         <activity android:name=".CarregarPerfilActivity" />
         <activity android:name=".CarregarPerfilClienteActivity" />
-        <activity android:name=".CarregarPerfilFuncionarioActivity"></activity>
-
+        <activity android:name=".CarregarPerfilFuncionarioActivity" />
         <activity
             android:name=".CadastraFuncionario"
             android:label="@string/tela_cadastrar_cliente"

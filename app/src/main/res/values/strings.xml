@@ -9,4 +9,6 @@
     <string name="home_fragment">PetShop Bichos SI</string>
     <string name="servicos_fragment">Tela Serviços - Cliente</string>
     <string name="sobre_fragment">Tela Sobre</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

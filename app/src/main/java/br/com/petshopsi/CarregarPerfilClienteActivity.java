@@ -31,6 +31,7 @@ public class CarregarPerfilClienteActivity extends AppCompatActivity {
     private String identificadorUsuario;
     private DatabaseReference databaseRef;
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseAuth usuarioFirebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +84,15 @@ public class CarregarPerfilClienteActivity extends AppCompatActivity {
     }
 
     public  void verificarPerfilUsuario(){
-        firebaseAuth.getCurrentUser();
+
+        //firebaseAuth.getCurrentUser();
+        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
         progressBarPerfil = (ProgressBar)findViewById(R.id.progressBarPerfil);
         progressBarPerfil.setVisibility(View.VISIBLE);
 
-        String uid = firebaseAuth.getCurrentUser().getEmail();
+        //String uid = firebaseAuth.getCurrentUser().getEmail();
+
+        final String uid = usuarioFirebase.getCurrentUser().getEmail();
         String emailUsuario = uid.toString();
         identificadorUsuario = Base64CustomFuncionario.codificarBase64(emailUsuario);
 
@@ -105,15 +110,12 @@ public class CarregarPerfilClienteActivity extends AppCompatActivity {
 
                         if (perfil.equals("Cliente") == true){
 
-                            /*Intent intentMEmp = new Intent(CarregarPerfilFuncionarioActivity.this, HomeClienteNavActivity.class);
-                            startActivity(intentMEmp);*/
-                            Toast.makeText(CarregarPerfilClienteActivity.this, "Login efetuado! " + perfil, Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(CarregarPerfilClienteActivity.this, "Login efetuado! " + perfil, Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(CarregarPerfilClienteActivity.this, HomeClienteNavActivity.class);
                             startActivity(intent);
-                            firebaseAuth.signOut();
                             progressBarPerfil.setVisibility(View.GONE);
-                            /*finish();*/
+                            finish();
 
                         } else{
 

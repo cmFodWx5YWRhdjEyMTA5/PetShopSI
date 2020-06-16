@@ -173,8 +173,8 @@ public class LoginFuncionarioActivity extends AppCompatActivity {
     }
 
     public void UsuarioLogado() {
-        Intent intentCarregarEmpresa = new Intent(this, CarregarPerfilFuncionarioActivity.class);
-        startActivity(intentCarregarEmpresa);
+        Intent intentCarregarFuncionario = new Intent(this, CarregarPerfilFuncionarioActivity.class);
+        startActivity(intentCarregarFuncionario);
         finish();
     }
 

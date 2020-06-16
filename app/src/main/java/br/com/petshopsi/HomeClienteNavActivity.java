@@ -8,9 +8,9 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import br.com.petshopsi.fragments.HomeFragment;
-import br.com.petshopsi.fragments.ServicosFragment;
-import br.com.petshopsi.fragments.SobreFragment;
+import br.com.petshopsi.fragments.HomeClienteFragment;
+import br.com.petshopsi.fragments.ServicosClienteFragment;
+import br.com.petshopsi.fragments.SobreClienteFragment;
 
 public class HomeClienteNavActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -31,24 +31,24 @@ public class HomeClienteNavActivity extends AppCompatActivity implements BottomN
     }
 
     // CRIANDO OBJETOS DOS JAVAs FRAGMENTS
-    HomeFragment homeFragment = new HomeFragment();
-    ServicosFragment servicosFragment = new ServicosFragment();
-    SobreFragment sobreFragment = new SobreFragment();
+    HomeClienteFragment homeClienteFragment = new HomeClienteFragment();
+    ServicosClienteFragment servicosClienteFragment = new ServicosClienteFragment();
+    SobreClienteFragment sobreClienteFragment = new SobreClienteFragment();
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
 
             case R.id.navigation_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, homeFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, homeClienteFragment).commit();
                 return true;
 
             case R.id.navigation_servicos:
-                getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, servicosFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, servicosClienteFragment).commit();
                 return true;
 
             case R.id.navigation_sobre:
-                getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, sobreFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, sobreClienteFragment).commit();
                 return true;
         }
         return false;

@@ -34,7 +34,6 @@ public class AnimaisCadastradosActivity extends AppCompatActivity {
     private FirebaseAuth usuarioFirebase;
     String identificadorCliente;
     String identificadorAnimal;
-    String identificadorCampanha;
     private ValueEventListener valueEventListenerAnimais;
     private FloatingActionButton btn_fab;
 
@@ -67,8 +66,8 @@ public class AnimaisCadastradosActivity extends AppCompatActivity {
         lv_animais.setAdapter(adapter);
 
         //adiciona o email
-        usuarioFirebase = FirebaseAuth.getInstance();
-        final String uidCliente = usuarioFirebase.getCurrentUser().getEmail();
+        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        String uidCliente = usuarioFirebase.getCurrentUser().getEmail();
 
         /* Convertendo email do cliente logado em Base64 */
         identificadorCliente = Base64Custom.codificarBase64(uidCliente);
@@ -81,14 +80,18 @@ public class AnimaisCadastradosActivity extends AppCompatActivity {
         valueEventListenerAnimais = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Limpar lista
-                animais.clear();
-                // Listar Cartoes
-                for (DataSnapshot dados: dataSnapshot.getChildren()){
-                    Animal animal = dados.getValue(Animal.class);
-                    animais.add(animal);
+                try {
+                    // Limpar lista
+                    animais.clear();
+                    // Listar Cartoes
+                    for (DataSnapshot dados: dataSnapshot.getChildren()){
+                        Animal animal = dados.getValue(Animal.class);
+                        animais.add(animal);
+                    }
+                    adapter.notifyDataSetChanged();
+                }catch (Exception e){
+                    Toast.makeText(AnimaisCadastradosActivity.this, "Erro Exceção", Toast.LENGTH_SHORT).show();
                 }
-                adapter.notifyDataSetChanged();
             }
 
             @Override

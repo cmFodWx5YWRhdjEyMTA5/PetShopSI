@@ -175,8 +175,8 @@ public class LoginClienteActivity extends AppCompatActivity {
     }
 
     public void UsuarioLogado() {
-        Intent intentCarregarEmpresa = new Intent(this, CarregarPerfilClienteActivity.class);
-        startActivity(intentCarregarEmpresa);
+        Intent intentCarregarCliente = new Intent(this, CarregarPerfilClienteActivity.class);
+        startActivity(intentCarregarCliente);
         finish();
     }
 
