@@ -119,7 +119,7 @@ public class CarregarPerfilFuncionarioActivity extends AppCompatActivity {
 
                         }
                     }catch (Exception e){
-                        Toast.makeText(CarregarPerfilFuncionarioActivity.this, "Sua conta não é de Cliente.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CarregarPerfilFuncionarioActivity.this, "Sua conta não é de Funcionário.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(CarregarPerfilFuncionarioActivity.this, LoginActivity.class);
                         startActivity(intent);
                         firebaseAuth.signOut();

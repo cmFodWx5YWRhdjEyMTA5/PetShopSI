@@ -216,7 +216,7 @@ public class LoginFuncionarioFragment extends Fragment {
     }
 
     public void UsuarioLogado() {
-        Intent intentCarregarFuncionario = new Intent(getActivity(), CarregarPerfilFuncionarioActivity.class);
+        Intent intentCarregarFuncionario = new Intent(getContext(), CarregarPerfilFuncionarioActivity.class);
         startActivity(intentCarregarFuncionario);
         getActivity().finish();
     }

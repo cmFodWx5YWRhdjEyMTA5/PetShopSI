@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import br.com.petshopsi.CadastraFuncionario;
+import br.com.petshopsi.CadastrarClienteActivity;
 import br.com.petshopsi.CarregarPerfilClienteActivity;
 import br.com.petshopsi.LoginClienteActivity;
 import br.com.petshopsi.R;
@@ -192,7 +193,7 @@ public class LoginClienteFragment extends Fragment {
             public void onClick(View v) {
                 //Intent intent = new Intent(LoginActivity.this, CadastrarClienteActivity.class);
                 // TESTE CRIAR SERVICO
-                Intent intent = new Intent(getActivity(), CadastraFuncionario.class);
+                Intent intent = new Intent(getActivity(), CadastrarClienteActivity.class);
                 startActivity(intent);
                 getActivity().finish();
             }
@@ -215,7 +216,7 @@ public class LoginClienteFragment extends Fragment {
     }
 
     public void UsuarioLogado() {
-        Intent intentCarregarCliente = new Intent(getActivity(), CarregarPerfilClienteActivity.class);
+        Intent intentCarregarCliente = new Intent(getContext(), CarregarPerfilClienteActivity.class);
         startActivity(intentCarregarCliente);
         getActivity().finish();
     }
