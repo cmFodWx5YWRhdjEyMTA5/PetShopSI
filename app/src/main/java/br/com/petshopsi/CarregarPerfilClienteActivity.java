@@ -31,7 +31,7 @@ public class CarregarPerfilClienteActivity extends AppCompatActivity {
     private String identificadorUsuario;
     private DatabaseReference databaseRef;
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseAuth usuarioFirebase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,24 +80,19 @@ public class CarregarPerfilClienteActivity extends AppCompatActivity {
             }
         }).start();
 
-
     }
 
     public  void verificarPerfilUsuario(){
 
-        //firebaseAuth.getCurrentUser();
-        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        firebaseAuth.getCurrentUser();
         progressBarPerfil = (ProgressBar)findViewById(R.id.progressBarPerfil);
         progressBarPerfil.setVisibility(View.VISIBLE);
 
-        //String uid = firebaseAuth.getCurrentUser().getEmail();
-
-        final String uid = usuarioFirebase.getCurrentUser().getEmail();
+        String uid = firebaseAuth.getCurrentUser().getEmail();
         String emailUsuario = uid.toString();
-        identificadorUsuario = Base64CustomFuncionario.codificarBase64(emailUsuario);
+        identificadorUsuario = Base64Custom.codificarBase64(emailUsuario);
 
         databaseRef = ConfiguracaoFirebase.getFirebase().child("Clientes").child(identificadorUsuario);
-
 
         if (firebaseAuth != null){
             databaseRef.addValueEventListener(new ValueEventListener() {
@@ -109,8 +104,6 @@ public class CarregarPerfilClienteActivity extends AppCompatActivity {
                         String perfil = String.valueOf(dataSnapshot.child("perfil").getValue().toString());
 
                         if (perfil.equals("Cliente") == true){
-
-                            // Toast.makeText(CarregarPerfilClienteActivity.this, "Login efetuado! " + perfil, Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(CarregarPerfilClienteActivity.this, HomeClienteNavActivity.class);
                             startActivity(intent);
