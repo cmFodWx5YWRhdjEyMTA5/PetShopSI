@@ -80,6 +80,7 @@ public class Funcionario{
         this.email = email;
     }
 
+    @Exclude
     public String getSenha() {
         return senha;
     }

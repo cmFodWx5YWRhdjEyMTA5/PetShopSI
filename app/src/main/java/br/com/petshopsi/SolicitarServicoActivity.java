@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.petshopsi.classes.Animal;
 import br.com.petshopsi.classes.CadastrarServico;
 import br.com.petshopsi.classes.Cliente;
 import br.com.petshopsi.classes.ConfiguracaoFirebase;
@@ -49,6 +50,7 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
 
     private Spinner spinner;
     private Spinner spinnerServico;
+    private Spinner spinnerAnimal;
     private CheckBox checkBoxTransporte;
     private TextView tv_dataSolicitacao;
     private TextView tv_horaSolicitacao;
@@ -57,21 +59,24 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
     private Button btnSolicitarServico;
     private String transporteSelecionado;
     private String servicoSelecionado;
-    private EditText edtValorServico;
+    private String animalSelecionado;
+    private TextView tv_ValorServico;
 
 
     ArrayList<String> list;
     ArrayAdapter<String> adapter;
 
-    ArrayList<String> listServico;
+    ArrayList<String> listServico, listAnimal;
     ArrayAdapter<String> adapterServico;
     Servico servico;
-    FirebaseDatabase database;
-    DatabaseReference ref;
+    Animal animal;
+    FirebaseDatabase database,databaseAnimal;
+    DatabaseReference ref,refAnimal;
 
     String identificadorUsuario;
     private FirebaseAuth usuarioFirebase;
     private DatabaseReference firebase;
+    ServicosSolicitados servicosSolicitados;
 
 
     @Override
@@ -82,12 +87,22 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
         // cast
         spinner = (Spinner) findViewById(R.id.spinner);
         spinnerServico = (Spinner) findViewById(R.id.spinnerServico);
+        spinnerAnimal = (Spinner) findViewById(R.id.spinnerAnimal);
         checkBoxTransporte = (CheckBox) findViewById(R.id.checkTransporte);
         tv_dataSolicitacao = (TextView) findViewById(R.id.tv_dataSolicitacao);
         tv_horaSolicitacao = (TextView) findViewById(R.id.tv_horaSolicitacao);
         ib_DataSolicitacao = (ImageButton) findViewById(R.id.ib_DataSolicitacao);
         btnSolicitarServico = (Button) findViewById(R.id.btnSolicitarServico);
-        edtValorServico = (EditText) findViewById(R.id.edtValorServico);
+        tv_ValorServico = (TextView) findViewById(R.id.tv_ValorServico);
+
+        /* ==-=---=---=--=- RECUPERA DADOS DO USUARIO LOGADO =-=-=-=-=-=-=-=-=-=*/
+        // INSTANCIA FIREBASE AUTH
+        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
+
+        // PEGA EMAIL DO USUARIO LOGADO E CONVERTE PRA Bas64
+        final String emailUsuarioLogado = usuarioFirebase.getCurrentUser().getEmail();
+        identificadorUsuario = Base64Custom.codificarBase64(emailUsuarioLogado);
+        /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
         // DADOS DOS SERVICOS CADASTRADOS NO SPINNER
         database = FirebaseDatabase.getInstance();
@@ -102,7 +117,7 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
 
         //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 list.clear();
@@ -122,6 +137,53 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
 
             }
         });
+
+
+        /*=================================================================*/
+
+        // RECEBER DADOS DOS ANIMAIS NO SPINNER
+        databaseAnimal = FirebaseDatabase.getInstance();
+        refAnimal = databaseAnimal.getReference("Animal").child(identificadorUsuario);
+        listAnimal = new ArrayList<>();
+
+
+        final ArrayAdapter<String> dataAdapterAnimal = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, listAnimal);
+        dataAdapterAnimal.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAnimal.setAdapter(dataAdapterAnimal);
+
+        //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+
+        refAnimal.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+
+                try {
+                    listAnimal.clear();
+                    //Pega todos os filhos que estão dentro do nó pai Serviço
+                    for(DataSnapshot dataAnimal: dataSnapshot1.getChildren()){
+
+                        animal = dataAnimal.getValue(Animal.class);
+                        listAnimal.add(animal.getNomeAnimal().toString());
+
+                    }
+
+                    spinnerAnimal.setAdapter(dataAdapterAnimal);
+
+                }catch (Exception e){
+                    Toast.makeText(SolicitarServicoActivity.this, "Nenhum animal cadastrado!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        /*=================================================================*/
 
 
         // CHECK BOX TRANSPORTE HABILITA O SPINNER DA MODALIDADE
@@ -178,6 +240,23 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
 
                 servicoSelecionado = parent.getItemAtPosition(position).toString();
 
+                tv_ValorServico.setText("R$ " + servico.getValor().toString());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // SPINNER QUE RECEBE SERVICOS DO BANCO
+        spinnerAnimal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                animalSelecionado = parent.getItemAtPosition(position).toString();
+
             }
 
             @Override
@@ -197,13 +276,6 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
         });
 
 
-        // INSTANCIA FIREBASE AUTH
-        //
-        //
-        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        // PEGA EMAIL DO USUARIO LOGADO E CONVERTE PRA Bas64
-        final String emailUsuarioLogado = usuarioFirebase.getCurrentUser().getEmail();
-        identificadorUsuario = Base64Custom.codificarBase64(emailUsuarioLogado);
 
 
         //Enviar dados para o banco no momento que for clicado no botão Solicitar
@@ -211,11 +283,38 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
             @Override
             public void onClick(View v) {
 
-                firebase = ConfiguracaoFirebase.getFirebase()
-                        .child("Campanhas")
-                        .child(identificadorUsuario);
+                try {
 
-                
+                    String valorServico = tv_ValorServico.getText().toString();
+                    String dataServico = tv_dataSolicitacao.getText().toString();
+                    String horaServico = tv_horaSolicitacao.getText().toString();
+
+                    servicosSolicitados = new ServicosSolicitados();
+                    servicosSolicitados.setId(UUID.randomUUID().toString());
+                    // ESSA INFORMAÇÂO ABAIXO DEVE SER SETADA NO ATENDIMENTO
+                    //String emailFuncionario = usuarioCliente.getEmail();
+                    servicosSolicitados.setEmailCliente(emailUsuarioLogado);
+                    servicosSolicitados.setStatus("Aguardando");
+                    servicosSolicitados.setNomeServico(servicoSelecionado);
+                    servicosSolicitados.setTransporte(transporteSelecionado);
+                    servicosSolicitados.setData(dataServico);
+                    servicosSolicitados.setHora(horaServico);
+                    servicosSolicitados.setValor(valorServico);
+                    servicosSolicitados.setNomeAnimal(animalSelecionado);
+                    //servicosSolicitados.setValor();
+
+                    firebase = ConfiguracaoFirebase.getFirebase().child("ServicosSolicitados").child(identificadorUsuario).child(servicosSolicitados.getId());
+                    firebase.setValue(servicosSolicitados);
+
+                    Toast.makeText(SolicitarServicoActivity.this, "Serviço solicitado com sucesso!", Toast.LENGTH_SHORT).show();
+
+                    /*feedbackCadastroSucesso();*/
+
+
+
+                }catch (Exception e){
+                    Toast.makeText(SolicitarServicoActivity.this, "Erro: " + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                }
 
 
             }

@@ -3,26 +3,50 @@ package br.com.petshopsi.classes;
 import com.google.firebase.database.DatabaseReference;
 
 public class ServicosSolicitados {
-    private String identificadorUsuario, servico, transporte, data, hora;
-    private Double valor;
+
+    private String id, emailCliente, emailFuncionario, status, nomeServico, transporte, data, hora, valor,nomeAnimal;
 
     public ServicosSolicitados() {
     }
 
-    public String getIdentificadorUsuario() {
-        return identificadorUsuario;
+    public String getId() {
+        return id;
     }
 
-    public void setIdentificadorUsuario(String identificadorUsuario) {
-        this.identificadorUsuario = identificadorUsuario;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getServico() {
-        return servico;
+    public String getEmailCliente() {
+        return emailCliente;
     }
 
-    public void setServico(String servico) {
-        this.servico = servico;
+    public void setEmailCliente(String emailCliente) {
+        this.emailCliente = emailCliente;
+    }
+
+    public String getEmailFuncionario() {
+        return emailFuncionario;
+    }
+
+    public void setEmailFuncionario(String emailFuncionario) {
+        this.emailFuncionario = emailFuncionario;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getNomeServico() {
+        return nomeServico;
+    }
+
+    public void setNomeServico(String nomeServico) {
+        this.nomeServico = nomeServico;
     }
 
     public String getTransporte() {
@@ -49,11 +73,19 @@ public class ServicosSolicitados {
         this.hora = hora;
     }
 
-    public Double getValor() {
+    public String getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(String valor) {
         this.valor = valor;
+    }
+
+    public String getNomeAnimal() {
+        return nomeAnimal;
+    }
+
+    public void setNomeAnimal(String nomeAnimal) {
+        this.nomeAnimal = nomeAnimal;
     }
 }
