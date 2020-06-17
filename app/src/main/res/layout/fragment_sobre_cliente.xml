@@ -13,33 +13,27 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/txtNome"
-            android:textSize="14dp"
+            android:id="@+id/txtEmail"
+            android:textSize="18dp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/txtPerfil"
-            android:textSize="14dp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSair"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sair"
-            app:icon="@drawable/ic_sair_branco_24dp" />
 
         <Button
             android:id="@+id/btnanimais"
-            android:layout_width="216dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Animais" />
+            android:text="Cadastrar Animais" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSair"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sair"
+            app:icon="@drawable/ic_sair_branco_24dp" />
 
 
     </LinearLayout>

@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.UUID;
 
 import br.com.petshopsi.classes.Servico;
+import br.com.petshopsi.fragments.ServicosFuncionarioFragment;
 
 
 public class CadastrarServicoActivity extends AppCompatActivity {
@@ -73,6 +74,8 @@ public class CadastrarServicoActivity extends AppCompatActivity {
                     servico.setObservacao(editObs.getText().toString());
                     servico.setValor(valor);
                     servico.salvar();
+                    Intent intent = new Intent(CadastrarServicoActivity.this, ServicosFuncionarioFragment.class);
+                    startActivity(intent);
                 }catch (Exception ex){
                     editValor.requestFocus();
                     editValor.setError("Campo vazio ou caracteres inválidos");

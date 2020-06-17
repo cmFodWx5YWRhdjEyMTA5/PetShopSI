@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingBottom="16dp"
+android:paddingLeft="16dp"
+android:paddingRight="16dp"
+android:paddingTop="16dp"
+tools:context=".fragments.AtenderFuncionarioFragment">
+
+<ListView
+    android:id="@+id/list_view_atender_servicos_solicitados"
+    android:outlineAmbientShadowColor="@color/colorPrimaryDark"
+    android:dividerHeight="1dp"
+    android:divider="@android:color/darker_gray"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.AtenderFuncionarioFragment">
+    android:layout_height="match_parent" />
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+</RelativeLayout>

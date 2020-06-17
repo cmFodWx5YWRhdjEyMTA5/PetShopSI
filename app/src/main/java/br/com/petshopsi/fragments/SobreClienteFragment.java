@@ -33,7 +33,8 @@ public class SobreClienteFragment extends Fragment {
     // USANDO REFERENCIA DO FirebaseAuth
     private FirebaseAuth autenticacao;
     private DatabaseReference referenciaFirebase;
-
+    private DatabaseReference firebase;
+    private FirebaseAuth usuarioFirebase;
 
     public SobreClienteFragment() {
         // Required empty public constructor
@@ -45,11 +46,18 @@ public class SobreClienteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sobre_cliente, container, false);
 
+        // PEGA USUARIO LOGADO....
+        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
+
+        // ESSA VARIAVEL TEM QUE SER O EMAIL DO CLIENTE
+        final String emailUsuarioLogado = usuarioFirebase.getCurrentUser().getEmail();
+
         MaterialButton btnSair = (MaterialButton)view.findViewById(R.id.btnSair);
         Button btnanimais = (Button)view.findViewById(R.id.btnanimais);
 
-        final TextView txtNome = (TextView)view.findViewById(R.id.txtNome);
-        final TextView txtPerfil = (TextView)view.findViewById(R.id.txtPerfil);
+        final TextView txtEmail = (TextView)view.findViewById(R.id.txtEmail);
+
+        txtEmail.setText(emailUsuarioLogado);
 
         btnSair.setOnClickListener(new View.OnClickListener() {
             @Override
