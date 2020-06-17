@@ -1,6 +1,7 @@
 package br.com.petshopsi.classes;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 
 public class Animal {
 
@@ -13,6 +14,7 @@ public class Animal {
         DatabaseReference referenciaFirebase = ConfiguracaoFirebase.getFirebase();
         referenciaFirebase.child("Animal").child(getId()).setValue(Animal.this);
     }
+
 
     public String getId() {
         return id;
