@@ -22,7 +22,6 @@ import br.com.petshopsi.SolicitarServicoActivity;
 
 public class ServicosFuncionarioFragment extends Fragment {
 
-    FloatingActionButton fab_solicitar_servico;
     ListView listV_Servicos;
     FirebaseDatabase database;
     DatabaseReference ref;
@@ -42,24 +41,10 @@ public class ServicosFuncionarioFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_servicos_cliente, container, false);
+        View view = inflater.inflate(R.layout.fragment_servicos_funcionario, container, false);
 
-
-        // CASTs
-        fab_solicitar_servico = (FloatingActionButton)view.findViewById(R.id.fab_solicitar_servico);
-
-        // IR PARA TELA DE SOLICITAR SERVICO
-        fab_solicitar_servico.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SolicitarServicoActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
+        // CAST
         listV_Servicos = (ListView)view.findViewById(R.id.listV_Servicos);
-
 
 
         list = new ArrayList<>();

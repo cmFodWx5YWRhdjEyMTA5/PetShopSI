@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.petshopsi.classes.CadastrarServico;
 import br.com.petshopsi.classes.Cliente;
 import br.com.petshopsi.classes.ConfiguracaoFirebase;
 import br.com.petshopsi.classes.Servico;
@@ -55,7 +56,7 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
     private ListView listViewServicos;
     private Button btnSolicitarServico;
     private String transporteSelecionado;
-    private String ServicoSelecionado;
+    private String servicoSelecionado;
     private EditText edtValorServico;
 
 
@@ -68,17 +69,9 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
     FirebaseDatabase database;
     DatabaseReference ref;
 
-    String identificadorContato;
-    private FirebaseAuth clienteFirebase;
+    String identificadorUsuario;
+    private FirebaseAuth usuarioFirebase;
     private DatabaseReference firebase;
-
-
-
-
-    // MODO ESTATICO DOS NOMES DOS SERVICOS
-    private String servico1 = "Tosa";
-    private String servico2 = "Banho";
-    private String servico3 = "Tosa e Banho";
 
 
     @Override
@@ -100,11 +93,19 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Servicos");
         list = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
 
-        ref.addValueEventListener(new ValueEventListener() {
+
+        final ArrayAdapter<String> dataAdapterServicos = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapterServicos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapterServicos);
+
+        //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
                 //Pega todos os filhos que estão dentro do nó pai Serviço
                 for(DataSnapshot data: dataSnapshot.getChildren()){
 
@@ -112,7 +113,7 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
                     list.add(servico.getServico().toString());
                 }
 
-                spinnerServico.setAdapter(adapter);
+                spinnerServico.setAdapter(dataAdapterServicos);
 
             }
 
@@ -121,10 +122,6 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
 
             }
         });
-
-
-
-
 
 
         // CHECK BOX TRANSPORTE HABILITA O SPINNER DA MODALIDADE
@@ -174,6 +171,22 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
         });
 
 
+        // SPINNER QUE RECEBE SERVICOS DO BANCO
+        spinnerServico.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                servicoSelecionado = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
 
         //ImageButtom para selecionar a data
         ib_DataSolicitacao.setOnClickListener(new View.OnClickListener() {
@@ -183,73 +196,28 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
             }
         });
 
+
+        // INSTANCIA FIREBASE AUTH
+        //
+        //
+        usuarioFirebase = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        // PEGA EMAIL DO USUARIO LOGADO E CONVERTE PRA Bas64
+        final String emailUsuarioLogado = usuarioFirebase.getCurrentUser().getEmail();
+        identificadorUsuario = Base64Custom.codificarBase64(emailUsuarioLogado);
+
+
         //Enviar dados para o banco no momento que for clicado no botão Solicitar
         btnSolicitarServico.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // RECEBE SERVICO DE UMA VARIAVEL ESTATICA
-                final String servico = servico1;
+                firebase = ConfiguracaoFirebase.getFirebase()
+                        .child("Campanhas")
+                        .child(identificadorUsuario);
 
-                if (servico.isEmpty()) {
-                    Toast.makeText(SolicitarServicoActivity.this, "Serviço esta vazio!", Toast.LENGTH_SHORT).show();
-                }else{
-
-                    identificadorContato = Base64Custom.codificarBase64(servico);
-
-                    //recuperar instancia Firebase
-                    firebase = ConfiguracaoFirebase.getFirebase().child("Usuarios").child(identificadorContato);
-                    firebase.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            // VERIFICA SE JA TEM DADOS DO USUARIO SALVO NO BD
-                            if (dataSnapshot.getValue() != null){
-
-                                // RECUPERAR DADOS DO SERVICO A SER ADICIONADO
-                                Cliente clienteContato = dataSnapshot.getValue(Cliente.class);
+                
 
 
-                                // RECUPERAR IDENTIFICADOR DO USUARIO
-                                Preferencias preferencias = new Preferencias(SolicitarServicoActivity.this);
-                                String identificadorUsuarioLogador = preferencias.getIdentificador();
-                                clienteFirebase.getCurrentUser().getEmail();
-                                firebase = ConfiguracaoFirebase.getFirebase();
-                                firebase = firebase.child("ServicosSolicitados")
-                                        .child(identificadorUsuarioLogador)
-                                        .child(identificadorContato);
-
-                                String valorServico = edtValorServico.getText().toString();
-                                String dataServico = tv_dataSolicitacao.getText().toString();
-                                String horaServico = tv_horaSolicitacao.getText().toString();
-                                // Convertendo variavel valorServico para Double
-                                Double valor = Double.parseDouble(valorServico);
-
-                                ServicosSolicitados ss = new ServicosSolicitados();
-                                ss.setIdentificadorUsuario(identificadorContato);
-                                ss.setServico(servico);
-                                ss.setTransporte(transporteSelecionado);
-                                ss.setData(dataServico);
-                                ss.setHora(horaServico);
-                                ss.setValor(valor);
-
-                                firebase.setValue(ss);
-
-                                Toast.makeText(SolicitarServicoActivity.this, "Serviço salvo com sucesso!", Toast.LENGTH_SHORT).show();
-
-                                abrirHomeCliente();
-
-                            }else {
-                                Toast.makeText(SolicitarServicoActivity.this, "Serviço não cadastrado!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-                }
             }
         });
 
@@ -360,14 +328,7 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
         tv_horaSolicitacao.setText((hour < 10 ? "0"+hour : hour)+"h"+
                 (minute < 10 ? "0"+minute : minute));
     }
-    //metódo para enviar a campanha para o firebase
 
-    /*private void cadastrarSolicitacaoServico() {
-
-        solicitarServico.salvar();
-        feedbackCadastroSucesso();
-
-    }*/
 
     public void feedbackCadastroSucesso(){
         AlertDialog.Builder builderFeedbackSucesso = new AlertDialog.Builder(SolicitarServicoActivity.this);
