@@ -77,7 +77,7 @@ public class AnimaisCadastradosActivity extends AppCompatActivity {
                 .child("Animal")
                 .child(identificadorCliente);
 
-        // Listener para recuperar dados dos cartoes
+        // Listener para recuperar dados dos animais
         valueEventListenerAnimais = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -127,9 +127,6 @@ public class AnimaisCadastradosActivity extends AppCompatActivity {
                 intent.putExtra("porteAnimal", animal.getPorte());
                 startActivity(intent);
 
-                /* Debug para testar se o clique no item da lista pega o email em base64 */
-                /*Toast.makeText(getActivity(), "UID-CARTAO: " + identificadorCartao, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), "UID-CAMPANHA: " + identificadorCampanha, Toast.LENGTH_SHORT).show();*/
 
             }
         });
