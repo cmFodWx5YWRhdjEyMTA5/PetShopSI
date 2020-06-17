@@ -8,12 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import br.com.petshopsi.fragments.HomeClienteFragment;
 import br.com.petshopsi.fragments.HomeFuncionarioFragment;
-import br.com.petshopsi.fragments.PetsFuncionarioFragment;
-import br.com.petshopsi.fragments.ServicosClienteFragment;
+import br.com.petshopsi.fragments.AtenderFuncionarioFragment;
 import br.com.petshopsi.fragments.ServicosFuncionarioFragment;
-import br.com.petshopsi.fragments.SobreClienteFragment;
 import br.com.petshopsi.fragments.SobreFuncionarioFragment;
 
 public class HomeFuncionarioNavActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
@@ -37,7 +34,7 @@ public class HomeFuncionarioNavActivity extends AppCompatActivity implements Bot
     // CRIANDO OBJETOS DOS JAVAs FRAGMENTS
     HomeFuncionarioFragment homeFuncionarioFragment = new HomeFuncionarioFragment();
     ServicosFuncionarioFragment servicosFuncionarioFragment = new ServicosFuncionarioFragment();
-    PetsFuncionarioFragment petsFuncionarioFragment = new PetsFuncionarioFragment();
+    AtenderFuncionarioFragment atenderFuncionarioFragment = new AtenderFuncionarioFragment();
     SobreFuncionarioFragment sobreFuncionarioFragment = new SobreFuncionarioFragment();
 
     @Override
@@ -52,8 +49,8 @@ public class HomeFuncionarioNavActivity extends AppCompatActivity implements Bot
                 getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, servicosFuncionarioFragment).commit();
                 return true;
 
-            case R.id.navigation_pets_funcionario:
-                getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, petsFuncionarioFragment).commit();
+            case R.id.navigation_atender_funcionario:
+                getSupportFragmentManager().beginTransaction().replace(R.id.id_frameLayout, atenderFuncionarioFragment).commit();
                 return true;
 
             case R.id.navigation_sobre_funcionario:

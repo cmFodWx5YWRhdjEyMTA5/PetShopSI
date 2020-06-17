@@ -9,9 +9,9 @@
         android:icon="@drawable/ic_pets_amarelo_24dp"
         android:title="Serviços"/>
 
-    <item android:id="@+id/navigation_pets_funcionario"
-        android:icon="@drawable/ic_sobre_amarelo_24dp"
-        android:title="Pets"/>
+    <item android:id="@+id/navigation_atender_funcionario"
+        android:icon="@drawable/ic_atender_24"
+        android:title="Atender"/>
 
     <item android:id="@+id/navigation_sobre_funcionario"
         android:icon="@drawable/ic_sobre_amarelo_24dp"
