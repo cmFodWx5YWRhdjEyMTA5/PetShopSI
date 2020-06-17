@@ -43,6 +43,7 @@ import br.com.petshopsi.classes.Cliente;
 import br.com.petshopsi.classes.ConfiguracaoFirebase;
 import br.com.petshopsi.classes.Servico;
 import br.com.petshopsi.classes.ServicosSolicitados;
+import br.com.petshopsi.fragments.ServicosClienteFragment;
 import br.com.petshopsi.helper.Base64Custom;
 import br.com.petshopsi.helper.Preferencias;
 
@@ -306,9 +307,7 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
                     firebase = ConfiguracaoFirebase.getFirebase().child("ServicosSolicitados").child(identificadorUsuario).child(servicosSolicitados.getId());
                     firebase.setValue(servicosSolicitados);
 
-                    Toast.makeText(SolicitarServicoActivity.this, "Serviço solicitado com sucesso!", Toast.LENGTH_SHORT).show();
-
-                    /*feedbackCadastroSucesso();*/
+                    feedbackCadastroSucesso();
 
 
 
@@ -446,7 +445,7 @@ public class SolicitarServicoActivity extends AppCompatActivity implements DateP
     }
 
     public void abrirHomeCliente(){
-        Intent intent = new Intent(SolicitarServicoActivity.this, HomeClienteNavActivity.class);
+        Intent intent = new Intent(SolicitarServicoActivity.this, ServicosClienteFragment.class);
         startActivity(intent);
         finish();
     }
